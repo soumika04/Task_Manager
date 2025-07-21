@@ -1,0 +1,68 @@
+<div class="container">
+  <h2>📝 My Task Manager</h2>
+
+  <form (submit)="addTask()">
+    <input
+      [(ngModel)]="newTask.title"
+      name="title"
+      type="text"
+      placeholder="Task Title"
+      required
+    />
+
+    <textarea
+      [(ngModel)]="newTask.description"
+      name="description"
+      placeholder="Task Description"
+    ></textarea>
+
+    <input
+      [(ngModel)]="newTask.dueDate"
+      name="dueDate"
+      type="date"
+    />
+
+    <select [(ngModel)]="newTask.priority" name="priority">
+      <option value="Low">Low 🔵</option>
+      <option value="Medium">Medium 🟡</option>
+      <option value="High">High 🔴</option>
+    </select>
+
+    <select [(ngModel)]="newTask.status" name="status">
+      <option value="Pending">Pending ⏳</option>
+      <option value="In Progress">In Progress 🛠️</option>
+      <option value="Done">Done ✅</option>
+    </select>
+
+    <button type="submit">➕ Add Task</button>
+  </form>
+
+  <!-- Filter Buttons -->
+  <div class="filter-buttons" style="margin-top: 1rem;">
+    <button (click)="filterByStatus('All')"
+      [class.active]="selectedStatus === 'All'">All</button>
+    <button (click)="filterByStatus('Pending')"
+      [class.active]="selectedStatus === 'Pending'">Pending</button>
+    <button (click)="filterByStatus('In Progress')"
+      [class.active]="selectedStatus === 'In Progress'">In Progress</button>
+    <button (click)="filterByStatus('Done')"
+      [class.active]="selectedStatus === 'Done'">Done</button>
+  </div>
+
+  <ul *ngIf="filteredTasks.length > 0" style="margin-top: 1rem;">
+    <li *ngFor="let task of filteredTasks" style="margin-bottom: 1rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5rem;">
+      <strong>{{ task.title }}</strong> — <em>{{ task.status }}</em> — <span>{{ task.priority }}</span><br />
+      Due: {{ task.dueDate | date:'mediumDate' }} <br />
+      {{ task.description }} <br />
+
+      <button (click)="toggleTask(task)" style="margin-right: 0.5rem;">
+        {{ task.isCompleted ? 'Mark Incomplete' : 'Mark Complete' }}
+      </button>
+      <button (click)="deleteTask(task)" style="color: red;">
+        Delete
+      </button>
+    </li>
+  </ul>
+
+  <p *ngIf="filteredTasks.length === 0" style="margin-top: 1rem;">No tasks found.</p>
+</div>
